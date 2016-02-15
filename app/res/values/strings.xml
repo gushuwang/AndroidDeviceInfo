@@ -6,5 +6,9 @@
     
     <string name="device_info">设备信息</string>
     <string name="app_info">app信息</string>
+    
+    <string name="package_name">包名称：</string>
+    <string name="package_code_path">包代码路径：</string>
+    <string name="package_resource_path">包资源路径：</string>
 
 </resources>

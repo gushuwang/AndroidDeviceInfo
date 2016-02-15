@@ -1,5 +1,8 @@
 package com.gushuwang.android.deviceinfo;
 
+import java.lang.reflect.Field;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * MainActivity
@@ -41,14 +45,38 @@ public class MainActivity extends Activity {
 	
 	private void addData() {
 		
-		addDataRow("°üÃû³Æ£º", getPackageName(), mProcessInfoContainer);
+		Field[] fields = Build.class.getDeclaredFields();
+		for (Field field : fields) {
+			field.setAccessible(true);
+			try {
+				addDataRow(field.getName() + "£º", field.get("").toString(), mDeviceInfoContainer);
+			} catch (IllegalAccessException e) {
+				Log.e(TAG, e.toString());
+				Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, e.toString());
+				Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		addDataRow(getResources().getString(R.string.package_name), getPackageName(), mProcessInfoContainer);
+		addDataRow(getResources().getString(R.string.package_code_path), getPackageCodePath(), mProcessInfoContainer);
+		addDataRow(getResources().getString(R.string.package_resource_path), getPackageResourcePath(), mProcessInfoContainer);
 		
 		// package info
 		PackageManager pm = getPackageManager();
 		try {
 			PackageInfo pi = pm.getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
+			if (pi != null) {
+				String versionName = pi.versionName == null ? "null" : pi.versionName;
+				addDataRow("versionName£º", versionName, mProcessInfoContainer);
+				
+				String versionCode = String.valueOf(pi.versionCode);
+				addDataRow("versionCode£º", versionCode, mProcessInfoContainer);
+			}
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, e.toString());
+			Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 		}
 	}
 	
