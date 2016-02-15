@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DeviceInfo</string>
+    <string name="action_settings">Settings</string>
+    
+    <string name="device_info">设备信息</string>
+    <string name="app_info">app信息</string>
+
+</resources>
